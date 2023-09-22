@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:todo_kltn/Component/BottomNavigation.dart';
+
+import 'Component/ButtomNavigation.dart';
 
 
 void main() {
@@ -9,16 +10,16 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp ({Key?key}):super(key:key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: ButtonNavigation()
+      home:  const TabBarScreen(),
+
     );
   }
 }
-
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
