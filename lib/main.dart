@@ -2,22 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-import 'Component/ButtomNavigation.dart';
-
+import 'Welcome/Welcome.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp ({Key?key}):super(key:key);
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      home:  const TabBarScreen(),
-
-    );
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        home: OnBoarding());
   }
 }
 
@@ -92,13 +90,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   // If listening is active show the recognized words
                   _speechToText.isListening
                       ? '$_lastWords'
-                  // If listening isn't active but could be tell the user
-                  // how to start it, otherwise indicate that speech
-                  // recognition is not yet ready or not supported on
-                  // the target device
+                      // If listening isn't active but could be tell the user
+                      // how to start it, otherwise indicate that speech
+                      // recognition is not yet ready or not supported on
+                      // the target device
                       : _speechEnabled
-                      ? 'Tap the microphone to start listening...'
-                      : 'Speech not available',
+                          ? 'Tap the microphone to start listening...'
+                          : 'Speech not available',
                 ),
               ),
             ),
@@ -107,8 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed:
-        // If not yet listening for speech start, otherwise stop
-        _speechToText.isNotListening ? _startListening : _stopListening,
+            // If not yet listening for speech start, otherwise stop
+            _speechToText.isNotListening ? _startListening : _stopListening,
         tooltip: 'Listen',
         child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
       ),
