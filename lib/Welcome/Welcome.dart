@@ -57,6 +57,28 @@ class _OnBoardingState extends State<OnBoarding> {
                 ],
               ),
             ),
+            SizedBox(
+              height: 12,
+              child: ListView.builder(
+                  itemCount: 3,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 12,
+                      width: 12,
+                      margin: EdgeInsets.only(left: 10),
+                      decoration: BoxDecoration(
+                          color: _currentPage == index
+                              ? Color.fromARGB(255, 255, 166, 74)
+                              : Colors.indigo,
+                          borderRadius: BorderRadius.circular(50)),
+                    );
+                  }),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
             Align(
               alignment: Alignment.center,
               child: SizedBox(
@@ -85,25 +107,6 @@ class _OnBoardingState extends State<OnBoarding> {
             const SizedBox(
               height: 15,
             ),
-            SizedBox(
-              height: 12,
-              child: ListView.builder(
-                  itemCount: 3,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      height: 12,
-                      width: 12,
-                      margin: EdgeInsets.only(left: 10),
-                      decoration: BoxDecoration(
-                          color: _currentPage == index
-                              ? Color.fromARGB(255, 255, 166, 74)
-                              : Colors.indigo,
-                          borderRadius: BorderRadius.circular(50)),
-                    );
-                  }),
-            )
           ],
         ));
   }

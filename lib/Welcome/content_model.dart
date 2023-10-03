@@ -57,7 +57,7 @@ class OnBoardingScreen extends StatelessWidget {
           ),
           Image.network(imageUrl),
           const SizedBox(
-            height: 30,
+            height: 40,
           ),
           Text(
             subheading,
@@ -65,9 +65,6 @@ class OnBoardingScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
                 color: Colors.indigo),
-          ),
-          const SizedBox(
-            height: 10,
           ),
           Text(
             paragraph,
