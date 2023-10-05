@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-import 'Register/singin.dart';
+import 'Register/signup.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        home: LoginPage());
+        home: RegScreen());
   }
 }
 

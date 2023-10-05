@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegScreen extends StatefulWidget {
+  const RegScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegScreen> createState() => _RegScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegScreenState extends State<RegScreen> {
   late Color myColor;
   late Size mediaSize;
+  TextEditingController fullnameController = TextEditingController();
+  TextEditingController conformpasswordController = TextEditingController();
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   bool rememberUser = false;
 
   @override
@@ -22,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
       decoration: BoxDecoration(
         color: myColor,
         image: DecorationImage(
-          image: const AssetImage("assets/images/bg.png"),
+          image: const AssetImage("assets/bg.png"),
           fit: BoxFit.cover,
           colorFilter:
               ColorFilter.mode(myColor.withOpacity(0.2), BlendMode.dstATop),
@@ -44,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
       child: const Padding(
           padding: EdgeInsets.only(top: 30.0, left: 25),
           child: Text(
-            'Hello\nSign in!',
+            'Create Your\nAccount',
             style: TextStyle(
                 fontSize: 36, color: Colors.white, fontWeight: FontWeight.bold),
           )),
@@ -73,18 +77,22 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 40),
+        const SizedBox(height: 15),
+        _buildGreyText("Full Name"),
+        _buildInputField(fullnameController),
+        const SizedBox(height: 15),
         _buildGreyText("Email address"),
         _buildInputField(emailController),
-        const SizedBox(height: 40),
+        const SizedBox(height: 15),
         _buildGreyText("Password"),
         _buildInputField(passwordController, isPassword: true),
-        const SizedBox(height: 40),
-        _buildRememberForgot(),
-        const SizedBox(height: 40),
+        const SizedBox(height: 15),
+        _buildGreyText("Conform Password"),
+        _buildInputField(conformpasswordController, isPassword: true),
+        const SizedBox(height: 30),
         _buildLoginButton(),
-        const SizedBox(height: 40),
-        _buildOtherLogin(),
+        const SizedBox(height: 30),
+        _loginInfo(context),
       ],
     );
   }
@@ -94,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
       text,
       style: const TextStyle(
         color: Colors.black,
-        fontSize: 18,
+        fontSize: 16,
       ),
     );
   }
@@ -107,41 +115,6 @@ class _LoginPageState extends State<LoginPage> {
         suffixIcon: isPassword ? Icon(Icons.remove_red_eye) : Icon(Icons.done),
       ),
       obscureText: isPassword,
-    );
-  }
-
-  Widget _buildRememberForgot() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Checkbox(
-                value: rememberUser,
-                onChanged: (value) {
-                  setState(() {
-                    rememberUser = value!;
-                  });
-                }),
-            Text(
-              "Remember me",
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-        TextButton(
-            onPressed: () {},
-            child: Text(
-              "I forgot my password",
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-              ),
-            ))
-      ],
     );
   }
 
@@ -159,35 +132,32 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: const Color.fromARGB(255, 255, 166, 74),
       ),
       child: const Text(
-        "LOGIN",
+        "SIGN UP",
         style: TextStyle(
             fontSize: 26, color: Colors.white, fontWeight: FontWeight.bold),
       ),
     );
   }
 
-  Widget _buildOtherLogin() {
-    return Center(
-      child: Column(
-        children: [
-          Text(
-            "Or Login with",
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-            ),
+  _loginInfo(context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Already have an account?",
+          style: TextStyle(
+            fontSize: 18,
           ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Tab(icon: Image.asset("assets/facebook.png")),
-              Tab(icon: Image.asset("assets/twitter.png")),
-              Tab(icon: Image.asset("assets/github.png")),
-            ],
-          )
-        ],
-      ),
+        ),
+        TextButton(
+            onPressed: () {},
+            child: Text(
+              "Login",
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ))
+      ],
     );
   }
 }
