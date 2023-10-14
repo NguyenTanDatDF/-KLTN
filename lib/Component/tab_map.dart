@@ -2,13 +2,13 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_kltn/Component/favoritepage.dart';
 import 'package:todo_kltn/Component/profilepage.dart';
-
+import 'package:todo_kltn/main.dart';
 import 'homepage.dart';
 import 'settingpage.dart';
 
 final List<Map<String, dynamic>> pageDetails = [
   {
-    'pageName': HomeScreen(
+    'pageName': MyHomePage(
       bgColor: Colors.blue.shade200,
     ),
     'title': 'Home',

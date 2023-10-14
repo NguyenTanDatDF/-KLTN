@@ -3,7 +3,7 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import 'Register/signup.dart';
-
+import 'Component/ButtomNavigation.dart';
 void main() {
   runApp(MyApp());
 }
@@ -15,12 +15,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        home: RegScreen());
+        home: TabBarScreen());
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  MyHomePage({Key? key, required Color bgColor}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -70,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Speech Demo'),
       ),
       body: Center(
         child: Column(
