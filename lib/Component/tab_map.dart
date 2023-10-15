@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:todo_kltn/Component/favoritepage.dart';
 import 'package:todo_kltn/Component/profilepage.dart';
 import 'package:todo_kltn/main.dart';
+import '../Tab/Voice.dart';
+import 'Calendar.dart';
 import 'homepage.dart';
 import 'settingpage.dart';
 
 final List<Map<String, dynamic>> pageDetails = [
   {
-    'pageName': MyHomePage(
-      bgColor: Colors.blue.shade200,
+    'pageName': Voice(
+
     ),
     'title': 'Home',
     'navigationBarColor': Colors.white,
     'bottom_color': Colors.indigo
   },
   {
-    'pageName': FavoriteScreen(
-      bgColor: Colors.green.shade200,
+    'pageName': CalendarApp(
+
     ),
     'title': 'Favorite',
     'navigationBarColor': Colors.white,

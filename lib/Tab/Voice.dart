@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:todo_kltn/Component/BottomNavigation.dart';
 import 'package:todo_kltn/Service/SwipeDetector.dart';
 
 
