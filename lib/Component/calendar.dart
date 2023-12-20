@@ -1,5 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../Model/Task.dart';
+
+Future<Task> fetchTask() async {
+  final response = await http
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Task.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
+  }
+}
+
 
 void main() {
   return runApp(CalendarApp());
@@ -24,27 +47,72 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  late Future<Task> futureTask;
+  @override
+  void initState() {
+    super.initState();
+    futureTask = fetchTask();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SfCalendar(
-          view: CalendarView.workWeek,
-          dataSource: MeetingDataSource(_getDataSource()),
-          // by default the month appointment display mode set as Indicator, we can
-          // change the display mode as appointment using the appointment display
-          // mode property
-          monthViewSettings: const MonthViewSettings(
-              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-        ));
+      return MaterialApp(
+      title: 'Fetch Data Example',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Fetch Data Example'),
+        ),
+        body: Center(
+          child: FutureBuilder<Task>(
+            future: futureTask,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data!.day);
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
     final DateTime today = DateTime.now();
     final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
+    final DateTime startTime1 = DateTime(today.year, today.month, today.day+1, 9);
+    final DateTime startTime2 = DateTime(today.year, today.month, today.day+2, 9);
+
     final DateTime endTime = startTime.add(const Duration(hours: 2));
     meetings.add(Meeting(
-        'Đi ăn sinh nhật clb', startTime, endTime, const Color(0xFF0F8644), false));
+        'Đi ăn sinh nhật clb', startTime, endTime, const Color(0xFF0F8644), false),
+     );
+    meetings.add(Meeting(
+        'Đi chơi với crush', startTime, endTime, const Color(0xFFC53B62), false),
+    );
+    meetings.add(Meeting(
+        'Đi xem đá bóng', startTime, endTime, const Color(0xFF9955A1), false),
+    );
+    meetings.add(Meeting(
+        'Đi chạy bộ', startTime1, endTime, const Color(0xFF2241AF), false),
+    );
+    meetings.add(Meeting(
+        'Đi nấu ăn', startTime1, endTime, const Color(0xFFDCCCCC), false),
+    );
+    meetings.add(Meeting(
+        'Đi chạy deadline', startTime2, endTime, const Color(0xFFFC5A89), false),
+    );
     return meetings;
   }
 }
