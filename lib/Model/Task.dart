@@ -1,79 +1,74 @@
 class Task {
-  final int id;
-  final String sum;
-  final String totd;
-  final String spec_time;
-  final String prio;
-  final String status;
-  final String cate;
-  final String diff;
-  final String imp;
-  final String exp_min;
-  final String dow;
+  final String summarize;
+  final String time_of_the_day;
+  final String specific_time;
+  final String frequency;
+  final String important;
+  final String category;
+  final String expected_minute;
+  final String day_of_week;
   final String day;
   final String month;
-  final String no_date;
-  final String no_week;
-  final String no_month;
+  final String number_of_date;
+  final String number_of_week;
+  final String number_of_month;
+  final String weekly;
+  final String daily;
   const Task({
-    required this.id,
-    required  this.sum,
-    required  this.totd,
-    required  this.spec_time,
-    required   this.prio,
-    required   this.status,
-    required  this.cate,
-    required  this.diff,
-    required  this.imp,
-    required  this.exp_min,
-    required  this.dow,
+    required  this.summarize,
+    required  this.time_of_the_day,
+    required  this.specific_time,
+    required  this.frequency,
+    required   this.important,
+    required  this.category,
+    required  this.expected_minute,
+    required  this.day_of_week,
     required  this.day,
     required  this.month,
-    required  this.no_date,
-    required  this.no_week,
-    required  this.no_month
+    required  this.number_of_date,
+    required  this.number_of_week,
+    required  this.number_of_month,
+    required this.daily,
+    required this.weekly,
   });
 
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return switch (json) {
     {
-
-    'id': int id,
-     'sum' : String sum,
-    'totd' : String totd,
-    'spec_time' : String spec_time,
-    'prio' : String prio,
-    'status' :  String status,
-    'cate' :  String cate,
-    'diff' : String diff,
-    'imp' : String imp,
-    'exp_min' : String exp_min,
-    'dow' :  String dow,
+      "frequency": String frequency,
+     'summarize' : String summarize,
+    'time_of_the_day' : String time_of_the_day,
+    'specific_time' : String specific_time,
+    'important' : String important,
+    'category' :  String category,
+    'expected_minute' : String expected_minute,
+    'day_of_week' :  String day_of_week,
     'day' : String day,
     'month' :  String month,
-    'no_date' : String no_date,
-    'no_week' : String no_week,
-    'no_month' :  String no_month,
-
+    'number_of_date' : String number_of_date,
+    'number_of_week' : String number_of_week,
+    'number_of_month' :  String number_of_month,
+    'weekly' : String weekly,
+    'daily' :String daily
+    
     } =>
     Task(
-    id: id,
-    sum :  sum,
-    totd :  totd,
-    spec_time :  spec_time,
-    prio :  prio,
-    status :   status,
-    cate :   cate,
-    diff :  diff,
-    imp :  imp,
-    exp_min :  exp_min,
-    dow :   dow,
+    frequency : frequency,
+    summarize :  summarize,
+    time_of_the_day :  time_of_the_day,
+    specific_time :  specific_time,
+    important :  important,
+    category :   category,
+    expected_minute :  expected_minute,
+    day_of_week :   day_of_week,
     day :  day,
     month :   month,
-    no_date :  no_date,
-    no_week :  no_week,
-    no_month :   no_month,
+    number_of_date :  number_of_date,
+    number_of_week :  number_of_week,
+    number_of_month :   number_of_month,
+    weekly :  weekly,
+    daily : daily
     ),
     _ => throw const FormatException('Failed to load task.'),
   };
