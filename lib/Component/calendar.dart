@@ -8,18 +8,25 @@ import 'package:http/http.dart' as http;
 
 import '../Model/Task.dart';
 
-Future<Task> fetchTask() async {
-  final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+Future<Task> createTask(String content) async {
+  final response = await http.post(
+    Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'entry': content,
+    }),
+  );
 
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
+  if (response.statusCode == 201) {
+    // If the server did return a 201 CREATED response,
     // then parse the JSON.
     return Task.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   } else {
-    // If the server did not return a 200 OK response,
+    // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Failed to create album.');
   }
 }
 
@@ -48,44 +55,65 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  late Future<Task> futureTask;
-  @override
-  void initState() {
-    super.initState();
-    futureTask = fetchTask();
-  }
-
+  final TextEditingController _controller = TextEditingController();
+  Future<Task>? _futureAlbum;
 
 
   @override
   Widget build(BuildContext context) {
-      return MaterialApp(
-      title: 'Fetch Data Example',
+    return MaterialApp(
+      title: 'Create Data Example',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Fetch Data Example'),
+          title: const Text('Create Data Example'),
         ),
-        body: Center(
-          child: FutureBuilder<Task>(
-            future: futureTask,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.day);
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
+        body: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(8),
+          child: (_futureAlbum == null) ? buildColumn() : buildFutureBuilder(),
         ),
       ),
     );
   }
+  Column buildColumn() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        TextField(
+          controller: _controller,
+          decoration: const InputDecoration(hintText: 'Enter Title'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _futureAlbum = createTask(_controller.text);
+            });
+          },
+          child: const Text('Create Data'),
+        ),
+      ],
+    );
+  }
+
+  FutureBuilder<Task> buildFutureBuilder() {
+    return FutureBuilder<Task>(
+      future: _futureAlbum,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(snapshot.data!.day);
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
 
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
@@ -115,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     return meetings;
   }
-}
+
 
 /// An object to set the appointment collection data source to calendar, which
 /// used to map the custom appointment data to the calendar appointment, and
