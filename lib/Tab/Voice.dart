@@ -1,11 +1,48 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:todo_kltn/Service/SwipeDetector.dart';
+import '../Model/Task.dart';
+import 'dart:developer' as developer;
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 
+Future<Task> createTask(String content) async {
+  String urlPath ="localhost:8081";
+  String callPath = "/api/v1/task";
+  final response = await http.post(
+    Uri.http(urlPath, callPath),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'sumarize':"tanning 11 10 AM "
+      ,'specific_time':"morning",
+      'time_of_the_day':"11:00:00",
+      'frequency':"single",
+      'category':"travelling",
+      'important':"3","expected_minute":"30 ",
+      'day_of_week':"","day":"10","month":"12",
+      'number_of_date':"3","number_of_week":"",
+      'number_of_month':"","daily":"","weekly":""
+    }),
+  );
 
-
+  if (response.statusCode == 200) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    //developer.log('log me 2', name: 'my.other.category');
+    return Task.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to create album.');
+  }
+}
 
 
 
@@ -18,6 +55,11 @@ class Voice extends StatefulWidget {
 }
 
 class _VoiceState extends State<Voice> {
+
+
+  final TextEditingController _controller = TextEditingController();
+  Future<Task>? _futureAlbum;
+
   SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
@@ -46,7 +88,11 @@ class _VoiceState extends State<Voice> {
   /// listen method.
   void _stopListening() async {
     await _speechToText.stop();
-    setState(() {});
+    setState(() {
+      _futureAlbum = createTask(_lastWords);
+      print("stop listening");
+    });
+
   }
 
 
@@ -55,7 +101,7 @@ class _VoiceState extends State<Voice> {
   /// the platform returns recognized words.
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
-      _lastWords = result.recognizedWords;
+      _lastWords = result.recognizedWords ;
 
     });
   }
