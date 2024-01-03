@@ -370,7 +370,15 @@ class _EditFormState extends State<EditForm> {
   void initState() {
     timeInputController.text = ""; //set the initial value of text field
     dateinput.text = ""; //set the initial value of text field
-
+    summarizeController.text = widget.task.summarize;
+    sessionController.text = widget.task.time_of_the_day;
+    frequenceController.text = widget.task.frequency;
+    expectedTimeController.text = widget.task.expected_minute  +  " minutes";
+    timeInputController.text = widget.task.specific_time;
+    prorityController.text =  widget.task.important+"/ 5";
+    dateInputController.text =
+        DateTime.now().year.toString() + "/" + widget.task.month + "/" + widget.task.day;
+    categoryInputController.text = widget.task.category;
     super.initState();
   }
 
@@ -491,15 +499,7 @@ class _EditFormState extends State<EditForm> {
   @override
   Widget build(BuildContext context) {
    // _time = parseTimeStringToTime(widget.task.specific_time);
-    summarizeController.text = widget.task.summarize;
-    sessionController.text = widget.task.time_of_the_day;
-    frequenceController.text = widget.task.frequency;
-    expectedTimeController.text = widget.task.expected_minute  +  " minutes";
-    timeInputController.text = widget.task.specific_time;
-    prorityController.text =  widget.task.important+"/ 5";
-    dateInputController.text =
-        DateTime.now().year.toString() + "/" + widget.task.month + "/" + widget.task.day;
-    categoryInputController.text = widget.task.category;
+
 
     return Scaffold(
       appBar: AppBar(

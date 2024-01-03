@@ -3,18 +3,17 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:palette_generator/palette_generator.dart';
-
+import 'package:flutter_foreground_service/flutter_foreground_service.dart';
 import '../Model/Task.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   // Always initialize Awesome Notifications
   await NotificationController.initializeLocalNotifications();
   await NotificationController.initializeIsolateReceivePort();
@@ -252,55 +251,10 @@ class NotificationController {
   }
 
   static Future<void> createNewListSchedule(List<Task> tasks) async {
-    // bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
-    // if (!isAllowed) isAllowed = await displayNotificationRationale();
-    // if (!isAllowed) return;
-    //
-    // for(Task task in tasks)
-    //   {
-    //     List<int> hms = parseTimeString(task.specific_time);
-    //      print(task.specific_time);
-    //      int id = generateRandomNumberFromInputString(task.summarize+task.specific_time);
-    //     print("hms: " + hms[0].toString());
-    //      await AwesomeNotifications().createNotification(
-    //        schedule: NotificationCalendar(
-    //            hour: 17,
-    //            minute: 7,
-    //            second: 0,
-    //            repeats: true
-    //        ),
-    //          content: NotificationContent(
-    //              id:id, // -1 is replaced by a random number
-    //              channelKey: 'alerts',
-    //              title: "You have a task!",
-    //              body:
-    //              task.summarize,
-    //              bigPicture: 'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
-    //              largeIcon: 'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
-    //              //'asset://assets/images/balloons-in-sky.jpg',
-    //              notificationLayout: NotificationLayout.BigPicture,
-    //              payload: {'notificationId': '1234567890'}),
-    //          actionButtons: [
-    //            NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
-    //            NotificationActionButton(
-    //                key: 'REPLY',
-    //                label: 'Reply Message',
-    //                requireInputText: true,
-    //                actionType: ActionType.SilentAction),
-    //            NotificationActionButton(
-    //                key: 'DISMISS',
-    //                label: 'Dismiss',
-    //                actionType: ActionType.DismissAction,
-    //                isDangerousOption: true)
-    //          ]);
-    //   }
-
-
      for(Task task in tasks)
        {
          print("Task schedule at hms: " + task.specific_time);
          createNewNotificationWithAgrs(task);
-
        }
   }
 
@@ -466,9 +420,7 @@ class ProfileScreen extends StatefulWidget {
   // The navigator key is necessary to navigate using static methods
   static final GlobalKey<NavigatorState> navigatorKey =
   GlobalKey<NavigatorState>();
-
   static Color mainColor = const Color(0xFF9D50DD);
-
   @override
   State<ProfileScreen> createState() => _AppState();
 }
@@ -487,8 +439,9 @@ class _AppState extends State<ProfileScreen> {
   List<Route<dynamic>> onGenerateInitialRoutes(String initialRouteName) {
     List<Route<dynamic>> pageStack = [];
     pageStack.add(MaterialPageRoute(
+
         builder: (_) =>
-        const MyHomePage(title: 'Awesome Notifications Example App')));
+        const MyHomePage(title: 'Setting')));
     if (initialRouteName == routeNotification &&
         NotificationController.initialAction != null) {
       pageStack.add(MaterialPageRoute(
@@ -516,6 +469,9 @@ class _AppState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
+      debugShowCheckedModeBanner: false,
+
       title: 'Awesome Notifications - Simple Example',
       navigatorKey: ProfileScreen.navigatorKey,
       onGenerateInitialRoutes: onGenerateInitialRoutes,
@@ -539,8 +495,11 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+
 class _MyHomePageState extends State<MyHomePage> {
   late List<Task> _tasksraw = [];
+  late bool toggleButtonValue = false;
+  late bool secondToggleButtonValue = false;
   @override
   void initState() {
     super.initState();
@@ -549,63 +508,128 @@ class _MyHomePageState extends State<MyHomePage> {
         _tasksraw = tasks;
       });
     });
+
+    _loadToggleButtonValues("notification");
   }
+
+  Future<void> _loadToggleButtonValues(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      toggleButtonValue = prefs.getBool(key) ?? false;
+      secondToggleButtonValue = prefs.getBool('secondToggleButtonValue') ?? false;
+    });
+  }
+
+  Future<void> _saveToggleButtonValue(String key, bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(key, value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'Push the buttons below to create new notifications',
+      body: ListView(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
+        children: [
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.access_alarm),
+                SizedBox(width: 16.0),
+                Expanded(
+                  child: Text(
+                    'Turn on notification',
+                    style: TextStyle(fontSize: 18.0),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Switch(
+                  value: toggleButtonValue,
+                  onChanged: (value) {
+                    setState(() {
+                      toggleButtonValue = value;
+                      _saveToggleButtonValue('notification', value);
+                      if(value)
+                        {
+                          NotificationController.createNewListSchedule(_tasksraw);
+                        }
+                      else
+                        {
+                          NotificationController.cancelNotifications();
+
+                        }
+                    });
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.settings),
+                SizedBox(width: 16.0),
+                Expanded(
+                  child: Text(
+                    'Setting 2',
+                    style: TextStyle(fontSize: 18.0),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Switch(
+                  value: secondToggleButtonValue,
+                  onChanged: (value) {
+                    setState(() {
+                      secondToggleButtonValue = value;
+                      _saveToggleButtonValue('secondToggleButtonValue', value);
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(width: 20),
-            FloatingActionButton(
-              heroTag: '1',
-              onPressed: () => NotificationController.createNewListSchedule(_tasksraw),
-              tooltip: 'Create New notification',
-              child: const Icon(Icons.outgoing_mail),
-            ),
-            const SizedBox(width: 10),
-            FloatingActionButton(
-              heroTag: '2',
-              onPressed: () => NotificationController.createNewNotification(),
-              tooltip: 'Schedule New notification',
-              child: const Icon(Icons.access_time_outlined),
-            ),
-            const SizedBox(width: 10),
-            FloatingActionButton(
-              heroTag: '3',
-              onPressed: () => {
-                NotificationController.executeLongTaskInBackground(),
-
-              },
-
-              tooltip: 'Reset badge counter',
-              child: const Icon(Icons.exposure_zero),
-            ),
-            const SizedBox(width: 10),
-            FloatingActionButton(
-              heroTag: '4',
-              onPressed: () => NotificationController.cancelNotifications(),
-              tooltip: 'Cancel all notifications',
-              child: const Icon(Icons.delete_forever),
-            ),
-          ],
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        // child: Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     FloatingActionButton(
+        //       heroTag: '1',
+        //       onPressed: () => NotificationController.createNewListSchedule(_tasksraw),
+        //       tooltip: 'Create New notification',
+        //       child: const Icon(Icons.outgoing_mail),
+        //     ),
+        //     const SizedBox(width: 16.0),
+        //     FloatingActionButton(
+        //       heroTag: '2',
+        //       onPressed: () => NotificationController.createNewNotification(),
+        //       tooltip: 'Schedule New notification',
+        //       child: const Icon(Icons.access_time_outlined),
+        //     ),
+        //     const SizedBox(width: 16.0),
+        //     FloatingActionButton(
+        //       heroTag: '3',
+        //       onPressed: () => {
+        //         NotificationController.executeLongTaskInBackground(),
+        //       },
+        //       tooltip: 'Reset badge counter',
+        //       child: const Icon(Icons.exposure_zero),
+        //     ),
+        //     const SizedBox(width: 16.0),
+        //     FloatingActionButton(
+        //       heroTag: '4',
+        //       onPressed: () => NotificationController.cancelNotifications(),
+        //       tooltip: 'Cancel all notifications',
+        //       child: const Icon(Icons.delete_forever),
+        //     ),
+        //   ],
+        // ),
+      ),
     );
   }
 }

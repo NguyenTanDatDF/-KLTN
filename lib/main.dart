@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_service/flutter_foreground_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -9,17 +11,24 @@ import 'Component/profilepage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  startForegroundService();
   // Always initialize Awesome Notifications
   await NotificationController.initializeLocalNotifications();
   await NotificationController.initializeIsolateReceivePort();
   runApp(MyApp());
 }
 
+void startForegroundService() async {
+  ForegroundService().start();
+  debugPrint("Started service");
+}
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+
+        title: 'Flutter Demo',
       home: TabBarScreen()
     );
   }
@@ -35,13 +44,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+
   SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
+  late bool toggleButtonValue = false;
 
+  Future<void> _loadToggleButtonValues(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      toggleButtonValue = prefs.getBool(key) ?? false;
+    });
+  }
   @override
   void initState() {
     super.initState();
+    _loadToggleButtonValues("notification");
     _initSpeech();
   }
 

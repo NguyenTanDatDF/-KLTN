@@ -54,7 +54,44 @@ class Task {
        daily: json["daily"] as String? ?? "",
      );
    }
-
+   Map<String, dynamic> toJson() {
+     return {
+       'summarize': summarize,
+       'time_of_the_day': time_of_the_day,
+       'specific_time': specific_time,
+       'frequency': frequency,
+       'important': important,
+       'category': category,
+       'expected_minute': expected_minute,
+       'day_of_week': day_of_week,
+       'day': day,
+       'month': month,
+       'number_of_date': number_of_date,
+       'number_of_week': number_of_week,
+       'number_of_month': number_of_month,
+       'weekly': weekly,
+       'daily': daily,
+     };
+   }
+   factory Task.fromJson5(Map<String, dynamic> json) {
+     return Task(
+       summarize: json['summarize'],
+       time_of_the_day: json['time_of_the_day'],
+       specific_time: json['specific_time'],
+       frequency: json['frequency'],
+       important: json['important'],
+       category: json['category'],
+       expected_minute: json['expected_minute'],
+       day_of_week: json['day_of_week'],
+       day: json['day'],
+       month: json['month'],
+       number_of_date: json['number_of_date'],
+       number_of_week: json['number_of_week'],
+       number_of_month: json['number_of_month'],
+       weekly: json['weekly'],
+       daily: json['daily'],
+     );
+   }
    factory Task.fromMap(Map<String, dynamic> json) => Task(
        frequency : json["frequency"] as String,
        summarize :  json["summarize"] as String,
