@@ -11,7 +11,7 @@ class Setting extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          child: const Text('Setting'),
+          child: const Text('All Your Task'),
           onPressed: () {
             // Navigate to second route when tapped.
           },

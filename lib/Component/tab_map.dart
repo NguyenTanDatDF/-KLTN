@@ -21,23 +21,22 @@ final List<Map<String, dynamic>> pageDetails = [
     'pageName': CalendarApp(
 
     ),
-    'title': 'Favorite',
+    'title': 'Calendar',
     'navigationBarColor': Colors.white,
     'bottom_color': Colors.green.shade600
   },
   {
     'pageName': SettingScreen(
-      bgColor: Colors.pink.shade200
+
     ),
-    'title': 'Setting',
+    'title': 'All Task',
     'navigationBarColor': Colors.white,
     'bottom_color':Colors.pink.shade600
   },
   {
     'pageName': ProfileScreen(
-      bgColor: Colors.amber.shade200,
     ),
-    'title': 'Profile',
+    'title': 'Setting',
     'navigationBarColor': Colors.white,
     'bottom_color': Colors.amber.shade600
   },

@@ -102,9 +102,7 @@ class _TableComplexExampleState extends State<TableComplexExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('TableCalendar - Complex'),
-      ),
+
       body: Column(
         children: [
           ValueListenableBuilder<DateTime>(

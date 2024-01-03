@@ -3,9 +3,15 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import 'Component/ButtomNavigation.dart';
+import 'Component/profilepage.dart';
 
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Always initialize Awesome Notifications
+  await NotificationController.initializeLocalNotifications();
+  await NotificationController.initializeIsolateReceivePort();
   runApp(MyApp());
 }
 

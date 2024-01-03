@@ -1,20 +1,23 @@
 class Task {
-  final String summarize;
-  final String time_of_the_day;
-  final String specific_time;
-  final String frequency;
+
+   final String summarize;
+   final String time_of_the_day;
+   final String specific_time;
+   final String frequency;
   final String important;
   final String category;
   final String expected_minute;
   final String day_of_week;
-  final String day;
-  final String month;
+   final String day;
+   final String month;
   final String number_of_date;
   final String number_of_week;
   final String number_of_month;
   final String weekly;
   final String daily;
-  const Task({
+   bool get isCompleted => number_of_month.toLowerCase() == 'true';
+
+  const Task( {
     required  this.summarize,
     required  this.time_of_the_day,
     required  this.specific_time,
@@ -32,12 +35,49 @@ class Task {
     required this.weekly,
   });
 
+   factory Task.fromJson1(Map<String, dynamic> json) {
+     return Task(
+       frequency: json["frequency"] as String? ?? "",
+       summarize: json["sumarize"] as String? ?? "",
+       time_of_the_day: json["time_of_the_day"] as String? ?? "",
+       specific_time: json["specific_time"] as String? ?? "",
+       important: json["important"] as String? ?? "",
+       category: json["category"] as String? ?? "",
+       expected_minute: json["expected_minute"] as String? ?? "",
+       day_of_week: json["day_of_week"] as String? ?? "",
+       day: json["day"] as String? ?? "",
+       month: json["month"] as String? ?? "",
+       number_of_date: json["number_of_date"] as String? ?? "",
+       number_of_week: json["number_of_week"] as String? ?? "",
+       number_of_month: json["number_of_month"] as String? ?? "",
+       weekly: json["weekly"] as String? ?? "",
+       daily: json["daily"] as String? ?? "",
+     );
+   }
+
+   factory Task.fromMap(Map<String, dynamic> json) => Task(
+       frequency : json["frequency"] as String,
+       summarize :  json["summarize"] as String,
+       time_of_the_day :  json["time_of_the_day"] as String,
+       specific_time :  json["specific_time"] as String,
+       important :  json["important"] as String,
+       category :   json["category"] as String,
+       expected_minute :  json["expected_minute"] as String,
+       day_of_week :   json["day_of_week"] as String,
+       day :  json["day"] as String,
+       month :   json["month"] as String,
+       number_of_date :  json["number_of_date"] as String,
+       number_of_week :  json["number_of_week"] as String,
+       number_of_month :   json["number_of_month"] as String,
+       weekly :  json["weekly"] as String,
+       daily : json["daily"] as String,
+   );
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return switch (json) {
     {
       "frequency": String frequency,
-     'summarize' : String summarize,
+     "summarize" : String summarize,
     'time_of_the_day' : String time_of_the_day,
     'specific_time' : String specific_time,
     'important' : String important,
@@ -51,7 +91,7 @@ class Task {
     'number_of_month' :  String number_of_month,
     'weekly' : String weekly,
     'daily' :String daily
-    
+
     } =>
     Task(
     frequency : frequency,
@@ -73,4 +113,8 @@ class Task {
     _ => throw const FormatException('Failed to load task.'),
   };
   }
+
+
+
+  set year(String year) {}
 }

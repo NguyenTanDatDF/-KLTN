@@ -17,7 +17,7 @@ class _TabBarScreenState extends State<TabBarScreen> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(
-        title: Text(pageDetails[_activePageIndex]['title']),
+
         backgroundColor: pageDetails[_activePageIndex]['bottom_color'],
       ) ,
       body:PageView(
@@ -46,10 +46,10 @@ class _TabBarScreenState extends State<TabBarScreen> {
           Icon(
               Icons.home,
               color:Colors.white),
-          Icon(Icons.favorite,
+          Icon(Icons.event,
               color:Colors.white),
 
-          Icon(Icons.person,
+          Icon(Icons.view_list,
               color:Colors.white),
           Icon(Icons.settings,
               color:Colors.white
